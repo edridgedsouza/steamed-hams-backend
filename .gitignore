@@ -105,3 +105,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Project-specific stuff
+*.png
+*.mp4
+*.m4a
