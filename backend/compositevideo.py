@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import shutil
 from os.path import join
 import zipfile
 from renderer import Renderer
@@ -24,21 +25,28 @@ class CompositeVideo:
 		# Download all frames as 1 ZIP file
 		zip_dir = join(self.cwd, 'media')
 		zip_path = join(zip_dir, 'frames.zip')
-		output_path = join(zip_dir, 'modified')
+		output_path = join(zip_dir, 'modified_temp')
+		if not os.path.exists(output_path):
+			os.makedirs(output_path)
 
 		with zipfile.ZipFile(zip_path, 'r') as z:
 			z.extractall(output_path)
 
 	def validate_frames(self):
-		newFrames = os.listdir(join(cwd, 'media/modified'))
+		newFrameDir = join(cwd, 'media/modified_temp')
+		newFrames = os.listdir(newFrameDir)
 		if len(newFrames) != self.NUMFRAMES:
 			return False
 		for frame in newFrames:
-			im = Image.open(join(cwd, 'media/modified', frame))
+			im = Image.open(join(newFrameDir frame))
 			width, height = im.size
 			if width != self.WIDTH or height != self.HEIGHT:
 				return False
+
 		# If right number and right dimensions, then pass the test
+		shutil.rmtree(join(cwd, 'media/modified'))
+		shutil.move(newFrameDir, 
+			join(cwd, 'media/modified'))
 		return True
 
 	def render_video(self):
