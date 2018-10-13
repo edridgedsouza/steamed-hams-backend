@@ -17,6 +17,8 @@ class Downloader:
 	def download(self):
 		if not os.path.exists(join(self.cwd,'media')):
 			os.makedirs(join(self.cwd, 'media'))
+			os.makedirs(join(self.cwd, 'media/original'))
+			os.makedirs(join(self.cwd, 'media/modified'))
 		if not os.path.exists(join(self.cwd,'media/video.mp4')):
 			print('Downloading video')
 			self.video.download(join(self.cwd,'media'), 'video')
